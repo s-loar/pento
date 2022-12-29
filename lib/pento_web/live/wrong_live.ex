@@ -2,7 +2,7 @@ defmodule PentoWeb.WrongLive do
   use Phoenix.LiveView, layout: {PentoWeb.LayoutView, "live.html"}
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, score: 0, message: "Make a guess: ", answer: Enum.random(1..10), current_time: time())}
+    {:ok, assign(socket, score: 0, message: "Make a guess: ", answer: Enum.random(1..10), current_time: time)}
   end
 
   def render(assigns) do
@@ -21,15 +21,20 @@ defmodule PentoWeb.WrongLive do
   end
 
   def handle_event("guess", %{"number" => guess} = data, socket) do
-    message = "Your guess: #{guess}. " <> if (String.to_integer(guess) == socket.assigns.answer), do: "Correct! The number is reset, so try again.", else: "Wrong. Guess again."
-    score = if (String.to_integer(guess) == socket.assigns.answer), do: socket.assigns.score + 1, else: socket.assigns.score - 1
-    answer = if (String.to_integer(guess) == socket.assigns.answer), do:  Enum.random(1..10), else: socket.assigns.answer
-    current_time = time()
+    {message, answer, score} = results((String.to_integer(guess) == socket.assigns.answer), guess, socket)
 
-    {:noreply, assign(socket, message: message, score: score, current_time: current_time, answer: answer)}
+    {:noreply, assign(socket, message: message, score: score, current_time: time, answer: answer)}
   end
 
   defp time() do
     DateTime.utc_now |> to_string
+  end
+
+  defp results(false, guess, socket) do
+    {"Your guess: #{guess} is wrong. Guess again.",  socket.assigns.answer,  socket.assigns.score - 1}
+  end
+
+  defp results(true, guess, socket) do
+     {"Correct! The number is reset, so try again.", Enum.random(1..10),  socket.assigns.score + 1}
   end
 end
