@@ -31,10 +31,10 @@ defmodule PentoWeb.WrongLive do
   end
 
   defp results(false, guess, socket) do
-    {"Your guess: #{guess} is wrong. Guess again.",  socket.assigns.answer,  socket.assigns.score - 1}
+    {"Your guess: #{guess} is wrong. Guess again.", socket.assigns.answer, socket.assigns.score - 1}
   end
 
   defp results(true, guess, socket) do
-     {"Correct! The number is reset, so try again.", Enum.random(1..10),  socket.assigns.score + 1}
+     {"Correct! The number is reset, so try again.", Enum.random(1..10), 0}
   end
 end
