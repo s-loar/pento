@@ -1,8 +1,16 @@
 defmodule PentoWeb.WrongLive do
   use Phoenix.LiveView, layout: {PentoWeb.LayoutView, "live.html"}
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, score: 0, message: "Make a guess: ", answer: Enum.random(1..10), current_time: time)}
+  alias Pento.Accounts
+
+  def mount(_params, session, socket) do
+    {
+      :ok, 
+    assign(socket, score: 0,
+    message: "Make a guess: ", 
+    answer: Enum.random(1..10), 
+    session_id: session["live_socket_id"])
+    }
   end
 
   def render(assigns) do
@@ -10,7 +18,6 @@ defmodule PentoWeb.WrongLive do
     <h1>Your Score: <%= @score %></h1>
     <h2>
       <%= @message %> 
-      <p>It's <%= @current_time %></p>
     </h2>
     <h2>
       <%= for n <- 1..10 do %>
