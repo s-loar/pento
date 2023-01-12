@@ -74,6 +74,7 @@ defmodule PentoWeb.Router do
 
   scope "/", PentoWeb do
     pipe_through [:browser, :require_authenticated_user]
+
     live_session :default, on_mount: PentoWeb.UserAuthLive do
       live "/guess", WrongLive
 

@@ -3,6 +3,7 @@ defmodule PentoWeb.PageController do
 
   def index(conn, _params) do
     conn = PentoWeb.UserAuth.fetch_current_user(conn, [])
+
     if conn.assigns[:current_user] do
       redirect(conn, to: "/guess")
     else
