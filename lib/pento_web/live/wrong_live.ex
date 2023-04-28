@@ -1,12 +1,15 @@
 defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
 
-  def mount(_params, _session, socket) do
+  alias Pento.Accounts
+
+  def mount(_params, session, socket) do
+    # user = Accounts.get_user_by_session_token(session["user_token"])
+
     {:ok,
      assign(socket,
        score: 0,
        message: "Make a guess:",
-       current_time: time(),
        answer: Enum.random(1..10)
      )}
   end
@@ -15,15 +18,14 @@ defmodule PentoWeb.WrongLive do
     {message, answer, score} =
       results(String.to_integer(guess) == socket.assigns.answer, guess, socket)
 
-    {:noreply,
-     assign(socket, message: message, score: score, current_time: time(), answer: answer)}
+    {:noreply, assign(socket, message: message, score: score, answer: answer)}
   end
 
   def render(assigns) do
     ~H"""
     <h1>Your Score: <%= @score %></h1>
     <h2>
-      <%= @message %> It's <%= @current_time %>
+      <%= @message %>
     </h2>
     <h2>
       <%= for n <- 1..10 do %>
@@ -33,10 +35,6 @@ defmodule PentoWeb.WrongLive do
       <% end %>
     </h2>
     """
-  end
-
-  defp time() do
-    DateTime.utc_now() |> to_string()
   end
 
   defp results(false, guess, socket) do
