@@ -211,7 +211,7 @@ defmodule PentoWeb.UserAuth do
         conn
         |> put_flash(:error, "You must confirm your email to continue.")
         |> maybe_store_return_to()
-        |> redirect(to: ~p"/users/log_in")
+        |> redirect(to: ~p"/users/confirm")
         |> halt()
       end
     else
