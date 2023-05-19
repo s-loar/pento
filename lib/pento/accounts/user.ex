@@ -45,9 +45,6 @@ defmodule Pento.Accounts.User do
     changeset
     |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
-    |> validate_format(:email, ~r/[^\s]+@launchscout.com$/,
-      message: "must be a Launch Scout email"
-    )
     |> validate_length(:email, max: 160)
     |> maybe_validate_unique_email(opts)
   end
